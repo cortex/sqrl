@@ -45,7 +45,9 @@ class ServerSession:
 
 
 if __name__ == "__main__":
-    PRIVATE_KEY1 = b'correct horse battery staple'
+
+    # These are of course supposed to be chosen with a good RNG but for this test-case it doesn't matter
+    PRIVATE_KEY1 = b'correct horse battery staple' 
     PRIVATE_KEY2 = b'wrong horse battery staple'
 
     client1 = Client(PRIVATE_KEY1)
