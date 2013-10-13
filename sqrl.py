@@ -3,6 +3,7 @@
 import hmac
 import ed25519
 import argparse
+import base64
 from urlparse import urlparse
 from urlparse import parse_qs
 
@@ -71,20 +72,42 @@ class Encryptor:
         return local_hmac.hexdigest()
 
     def sign(self, value):
-        return self.sk.sign(value, encoding="base64")
+        signed = self.sk.sign(value, encoding="base64")
+        signed = BaseConverter.encode(signed)
+        return BaseConverter.cleanUp(signed)
 
     def getPublicKey(self):
-        return self.vk.to_ascii(encoding="base64")
+        key = self.vk.to_ascii(encoding="base64")
+        key = BaseConverter.encode(key)
+        return BaseConverter.cleanUp(key)
+class BaseConverter:
+    @classmethod
+    def cleanUp(self, value):
+        while value[-1] == "=":
+            value = value.rstrip("=")
+        return value
+
+    @classmethod
+    def decode(self, value):
+        return base64.urlsafe_b64decode(value)
+
+    @classmethod
+    def encode(self, value):
+        return base64.urlsafe_b64encode(value)
 
 
 def test(uri, signed_uri, public_key):
     verifying_key = ed25519.VerifyingKey(public_key, encoding="base64")
+    key = BaseConverter.decode(public_key + "==")
+    verifying_key = ed25519.VerifyingKey(key, encoding="base64")
 
     print "URI: " + uri
     print "Domin: \"" + domain + "\""
     print "Publick Key: " + public_key
     print "Signed URI: " + signed_uri
     try:
+
+        signed_uri = BaseConverter.decode(signed_uri + "=")
         verifying_key.verify(signed_uri, uri, encoding="base64")
         print "signature is good"
     except ed25519.BadSignatureError:
