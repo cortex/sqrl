@@ -1,46 +1,102 @@
-import nacl.utils
-import nacl.signing
+#!/usr/bin/python
 
-import hashlib
 import hmac
-import base64
-import urllib.parse
+import ed25519
+from urlparse import urlparse
+from urlparse import parse_qs
 
 
-class Client:
-    def __init__(self, private_key):
-        self.private_key = private_key
+class URIParser():
+    def __init__(self, uri):
+        self.orig_uri = uri
+        uri_parsed = urlparse(uri)
+        self._processURI(uri_parsed)
 
-    def make_key(self, site):
-        h = hmac.new(self.private_key, digestmod=hashlib.sha256)
-        h.update(bytes(site, "utf-8"))
-        return h.digest()
+    def _processURI(self, uri):
+        self.domain = uri.netloc
+        self.path = uri.path
+        self.scheme = uri.scheme
+        self.query = uri.query
+        self.queries = parse_qs(uri.query)
 
-    def create_code(self, sqrl):
-        parsed = urllib.parse.urlparse(sqrl)
-        site = parsed.netloc
-        encoded = urllib.parse.parse_qs(parsed.query)["sqrl"][0]
+    def getURI(self):
+        return self.orig_uri
 
-        challenge = base64.urlsafe_b64decode(encoded)
-        site_key = self.make_key(site)
-        signing_key = nacl.signing.SigningKey(site_key)
-        signed = signing_key.sign(bytes(challenge))
-        public_key = signing_key.verify_key
-        return public_key._key, signed
+    def getDomain(self):
+        domain = ''
+        if "d" in self.queries:
+            depth = int(self.queries['d'][0])
+            domain = self.domain + self.path[0:depth]
+        else:
+            domain = self.domain
+        return domain
 
-    def submit(self):
-        pass
-        #send secured
+
+# Master Key Manager
+class MKM:
+    def create_key(self):
+        sk, vk = ed25519.create_keypair()
+        self._store_key(sk)
+
+    def _store_key(self, sk):
+        open("my-secret-seed", "wb").write(sk.to_seed())
+
+    def get_key(self):
+        seed = open("my-secret-seed", "rb").read()
+        return ed25519.SigningKey(seed)
+
+
+class Encryptor:
+    def __init__(self, masterkey, domain):
+        self.masterkey = masterkey
+        self.domain = domain
+        self.sk, self.vk = self._site_key_pair()
+
+    def _site_key_pair(self):
+        seed = self._site_seed()
+        sk = ed25519.SigningKey(seed)
+        vk = sk.get_verifying_key()
+        return sk, vk
+
+    def _site_seed(self):
+        key = self.masterkey.to_ascii(encoding="base64")
+        local_hmac = hmac.new(key)
+        local_hmac.update(self.domain)
+        return local_hmac.hexdigest()
+
+    def sign(self, value):
+        return self.sk.sign(value, encoding="base64")
+
+    def getPublicKey(self):
+        return self.vk.to_ascii(encoding="base64")
+
+
+def test(uri, signed_uri, public_key):
+    verifying_key = ed25519.VerifyingKey(public_key, encoding="base64")
+
+    print "URI: " + uri
+    print "Signed URI: " + signed_uri
+
+    try:
+        verifying_key.verify(signed_uri, uri, encoding="base64")
+        print "signature is good"
+    except ed25519.BadSignatureError:
+        print "signature is bad!"
+
 
 if __name__ == "__main__":
+    uriparsed = URIParser(
+        "sqrl://example.com/login/authsqrl.php?d=6&nut=asddasdad")
+    uri = uriparsed.getURI()
+    domain = uriparsed.getURI()
 
-    # These are of course supposed to be chosen with a
-    # good RNG but for this test-case it doesn't matter
-    PRIVATE_KEY1 = b'correct horse battery staple'
-    PRIVATE_KEY2 = b'wrong horse battery staple'
+    manager = MKM()
+    #manager.create_key()
+    masterkey = manager.get_key()
+    verifying_key = masterkey.get_verifying_key()
 
-    client1 = Client(PRIVATE_KEY1)
-    client2 = Client(PRIVATE_KEY2)
+    enc = Encryptor(masterkey, domain)
+    public_key = enc.getPublicKey()
+    signed_uri = enc.sign(uri)
 
-    client1.sumbit()
-    client2.submit()
+    test(uri, signed_uri, public_key)
