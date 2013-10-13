@@ -97,7 +97,6 @@ class BaseConverter:
 
 
 def test(uri, signed_uri, public_key):
-    verifying_key = ed25519.VerifyingKey(public_key, encoding="base64")
     key = BaseConverter.decode(public_key + "==")
     verifying_key = ed25519.VerifyingKey(key, encoding="base64")
 
@@ -116,7 +115,7 @@ def test(uri, signed_uri, public_key):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("sqrlurl")
+    parser.add_argument("sqrlurl", help="The SQRL URL for for Authenticating")
 
     args = parser.parse_args()
     uri = args.sqrlurl
