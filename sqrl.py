@@ -72,14 +72,20 @@ class Encryptor:
         return local_hmac.hexdigest()
 
     def sign(self, value):
-        signed = self.sk.sign(value, encoding="base64")
-        signed = BaseConverter.encode(signed)
-        return BaseConverter.cleanUp(signed)
+        signed = self.sk.sign(value)
+        return BaseConverter.encode(signed)
 
     def getPublicKey(self):
-        key = self.vk.to_ascii(encoding="base64")
-        key = BaseConverter.encode(key)
-        return BaseConverter.cleanUp(key)
+        key = self.vk.to_bytes()
+        return BaseConverter.encode(key)
+
+
+class SQRLComposer:
+    def __init__(self):
+        pass
+
+
+# Uitility to encode and decode base64url to spec
 class BaseConverter:
     @classmethod
     def cleanUp(self, value):
@@ -89,16 +95,18 @@ class BaseConverter:
 
     @classmethod
     def decode(self, value):
-        return base64.urlsafe_b64decode(value)
+        value = base64.urlsafe_b64decode(value)
+        return self.cleanUp(value)
 
     @classmethod
     def encode(self, value):
-        return base64.urlsafe_b64encode(value)
+        value = base64.urlsafe_b64encode(value)
+        return self.cleanUp(value)
 
 
 def test(uri, signed_uri, public_key):
     key = BaseConverter.decode(public_key + "==")
-    verifying_key = ed25519.VerifyingKey(key, encoding="base64")
+    verifying_key = ed25519.VerifyingKey(key)
 
     print "URI: " + uri
     print "Domin: \"" + domain + "\""
@@ -106,8 +114,8 @@ def test(uri, signed_uri, public_key):
     print "Signed URI: " + signed_uri
     try:
 
-        signed_uri = BaseConverter.decode(signed_uri + "=")
-        verifying_key.verify(signed_uri, uri, encoding="base64")
+        signed_uri = BaseConverter.decode(signed_uri + "==")
+        verifying_key.verify(signed_uri, uri)
         print "signature is good"
     except ed25519.BadSignatureError:
         print "signature is bad!"
