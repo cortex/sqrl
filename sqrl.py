@@ -76,6 +76,8 @@ def test(uri, signed_uri, public_key):
     verifying_key = ed25519.VerifyingKey(public_key, encoding="base64")
 
     print "URI: " + uri
+    print "Domin: \"" + domain + "\""
+    print "Publick Key: " + public_key
     print "Signed URI: " + signed_uri
     try:
         verifying_key.verify(signed_uri, uri, encoding="base64")
