@@ -47,6 +47,11 @@ class MKM:
         return ed25519.SigningKey(seed)
 
 
+# Encryptor
+# Responsible for:
+# - Creating site specific key pair
+# - Signing SRQL response
+# - Providing public key
 class Encryptor:
     def __init__(self, masterkey, domain):
         self.masterkey = masterkey
