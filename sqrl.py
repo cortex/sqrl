@@ -77,7 +77,6 @@ def test(uri, signed_uri, public_key):
 
     print "URI: " + uri
     print "Signed URI: " + signed_uri
-
     try:
         verifying_key.verify(signed_uri, uri, encoding="base64")
         print "signature is good"
@@ -86,10 +85,6 @@ def test(uri, signed_uri, public_key):
 
 
 if __name__ == "__main__":
-    uriparsed = URIParser(
-        "sqrl://example.com/login/authsqrl.php?d=6&nut=asddasdad")
-    uri = uriparsed.getURI()
-    domain = uriparsed.getURI()
     parser = argparse.ArgumentParser()
     parser.add_argument("sqrlurl")
 
@@ -97,11 +92,11 @@ if __name__ == "__main__":
     uri = args.sqrlurl
 
     uriparsed = URIParser(uri)
+    domain = uriparsed.getDomain()
 
     manager = MKM()
     #manager.create_key()
     masterkey = manager.get_key()
-    verifying_key = masterkey.get_verifying_key()
 
     enc = Encryptor(masterkey, domain)
     public_key = enc.getPublicKey()
