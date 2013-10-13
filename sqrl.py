@@ -2,6 +2,7 @@
 
 import hmac
 import ed25519
+import argparse
 from urlparse import urlparse
 from urlparse import parse_qs
 
@@ -89,6 +90,13 @@ if __name__ == "__main__":
         "sqrl://example.com/login/authsqrl.php?d=6&nut=asddasdad")
     uri = uriparsed.getURI()
     domain = uriparsed.getURI()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("sqrlurl")
+
+    args = parser.parse_args()
+    uri = args.sqrlurl
+
+    uriparsed = URIParser(uri)
 
     manager = MKM()
     #manager.create_key()
