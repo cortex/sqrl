@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import httplib
 import hmac
 import ed25519
 import argparse
@@ -88,9 +88,24 @@ class Encryptor:
         return BaseConverter.encode(key)
 
 
-class SQRLComposer:
-    def __init__(self):
-        pass
+class SQRLRequestor():
+    def __init__(self, uri, public_key):
+        self.headers = {"Content-type": "application/x-www-form-urlencoded",
+                        "Accept": "text/plain"}
+        self.uri = uri
+        self.key = public_key
+        self.http = httplib.HTTPConnection(self.uri.domain)
+
+    def path(self):
+        res = self.uri.path + "?" + self.uri.query + "&sqrlkey=" + self.key
+        return res
+
+    def url(self):
+        return self.uri.domain + self.path()
+
+    def send(self, body):
+        self.http.request("POST", self.path(),
+                          "sqrlsig=" + body, self.headers)
 
 
 # Uitility to encode and decode base64url to spec
@@ -144,6 +159,12 @@ if __name__ == "__main__":
 
     enc = Encryptor(masterkey, domain)
     public_key = enc.getPublicKey()
-    signed_uri = enc.sign(uri)
 
-    test(uri, signed_uri, public_key)
+    sqrlconn = SQRLRequestor(uriparsed, public_key)
+    url = sqrlconn.url()
+
+    signed_url = enc.sign(url)
+
+    sqrlconn.send(signed_url)
+
+    test(url, signed_url, public_key)
