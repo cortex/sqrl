@@ -4,6 +4,7 @@ import hmac
 import ed25519
 import argparse
 import base64
+import os
 from urlparse import urlparse
 from urlparse import parse_qs
 
@@ -36,15 +37,22 @@ class URIParser():
 
 # Master Key Manager
 class MKM:
-    def create_key(self):
+    def __init__(self, path="./", force=False):
+        self.storageFile = path + ".secret_key"
+        self.force = force
+        self._create_key()
+
+    def _create_key(self):
         sk, vk = ed25519.create_keypair()
         self._store_key(sk)
 
     def _store_key(self, sk):
-        open("my-secret-seed", "wb").write(sk.to_seed())
+        # if the storageFile doesnt exists or force is set write file
+        if not os.path.exists(self.storageFile) or self.force:
+            open(self.storageFile, "wb").write(sk.to_seed())
 
     def get_key(self):
-        seed = open("my-secret-seed", "rb").read()
+        seed = open(self.storageFile, "rb").read()
         return ed25519.SigningKey(seed)
 
 
@@ -132,7 +140,6 @@ if __name__ == "__main__":
     domain = uriparsed.getDomain()
 
     manager = MKM()
-    #manager.create_key()
     masterkey = manager.get_key()
 
     enc = Encryptor(masterkey, domain)
