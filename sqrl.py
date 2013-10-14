@@ -10,6 +10,11 @@ from urlparse import parse_qs
 
 
 class URIParser():
+    """
+    URIParser
+    - Value object for initial SQRL URL
+    """
+
     def __init__(self, uri):
         self.orig_uri = uri
         uri_parsed = urlparse(uri)
@@ -35,8 +40,15 @@ class URIParser():
         return domain
 
 
-# Master Key Manager
 class MKM:
+    """
+    Master Key Manager
+    - Creates Keys
+    - Deletes Keys
+    - Stores Keys and Encrypts Storage
+    - Retrieves Stored Keys
+    """
+
     def __init__(self, path="./", force=False):
         self.storageFile = path + ".secret_key"
         self.force = force
@@ -56,12 +68,14 @@ class MKM:
         return ed25519.SigningKey(seed)
 
 
-# Encryptor
-# Responsible for:
-# - Creating site specific key pair
-# - Signing SRQL response
-# - Providing public key
 class Encryptor:
+    """
+    Encryptor
+    - Creating site specific key pair
+    - Signing SRQL response
+    - Providing public key
+    """
+
     def __init__(self, masterkey, domain):
         self.masterkey = masterkey
         self.domain = domain
@@ -89,6 +103,13 @@ class Encryptor:
 
 
 class SQRLRequestor():
+    """
+    SQRLRequestor
+    - Formats SQRL request
+    - Submits the SQRL reuqest
+    -
+    """
+
     def __init__(self, uri, public_key):
         self.headers = {"Content-type": "application/x-www-form-urlencoded",
                         "Accept": "text/plain"}
