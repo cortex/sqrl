@@ -117,16 +117,20 @@ class SQRLRequestor():
         self.key = public_key
         self.http = httplib.HTTPConnection(self.uri.domain)
 
-    def path(self):
+    def _path(self):
         res = self.uri.path + "?" + self.uri.query + "&sqrlkey=" + self.key
         return res
 
     def url(self):
-        return self.uri.domain + self.path()
+        return self.uri.domain + self._path()
+
+    def _body(self, body):
+        return "sqrlsig=" + body
 
     def send(self, body):
-        self.http.request("POST", self.path(),
-                          "sqrlsig=" + body, self.headers)
+        body = self._body(body)
+        self.http.request("POST", self._path(),
+                          body, self.headers)
 
 
 # Uitility to encode and decode base64url to spec
