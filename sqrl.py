@@ -9,6 +9,9 @@ from urlparse import urlparse
 from urlparse import parse_qs
 
 
+SQRLVER = "1"
+
+
 class URIParser():
     """
     URIParser
@@ -117,8 +120,10 @@ class SQRLRequestor():
         self.http = httplib.HTTPConnection(self.uri.domain)
 
     def _path(self):
-        res = self.uri.path + "?" + self.uri.query + "&sqrlkey=" + self.key
-        return res
+        res = [self.uri.path, "?", self.uri.query,
+               "&sqrlver=", SQRLVER,
+               "&sqrlkey=", self.key]
+        return "".join(res)
 
     def url(self):
         return self.uri.domain + self._path()
@@ -128,8 +133,8 @@ class SQRLRequestor():
 
     def send(self, body):
         body = self._body(body)
-        self.http.request("POST", self._path(),
-                          body, self.headers)
+        path = self._path()
+        self.http.request("POST", path, body, self.headers)
 
 
 class BaseConverter:
