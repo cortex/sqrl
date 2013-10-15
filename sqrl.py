@@ -107,7 +107,6 @@ class SQRLRequestor():
     SQRLRequestor
     - Formats SQRL request
     - Submits the SQRL reuqest
-    -
     """
 
     def __init__(self, uri, public_key):
@@ -133,8 +132,12 @@ class SQRLRequestor():
                           body, self.headers)
 
 
-# Uitility to encode and decode base64url to spec
 class BaseConverter:
+    """
+    BaseConverter
+    Uitility to encode and decode base64url to spec
+    """
+
     @classmethod
     def cleanUp(self, value):
         while value[-1] == "=":
@@ -152,7 +155,11 @@ class BaseConverter:
         return self.cleanUp(value)
 
 
-def test(uri, signed_uri, public_key):
+def test(uri, signed_uri, public_key, domain):
+    """
+    Verifies the components of the challenge for debugging
+    """
+
     key = BaseConverter.decode(public_key + "==")
     verifying_key = ed25519.VerifyingKey(key)
 
