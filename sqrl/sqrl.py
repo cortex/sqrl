@@ -152,7 +152,7 @@ class SQRLRequestor():
         path = self._path()
         self.http.request("POST", path, body, self.headers)
         response = self.http.getresponse()
-        if response.status == '200':
+        if response.status == 200:
             return True
         else:
             return False
@@ -236,7 +236,7 @@ def run(uri, bool_notify=False):
         if result:
             notify("Authentication to " + domain + ": Successful")
         else:
-            notify("Authentication to " + domain + ": Successful")
+            notify("Authentication to " + domain + ": Failed")
 
 
 def notify(msg):
