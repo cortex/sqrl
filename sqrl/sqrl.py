@@ -31,7 +31,24 @@ class URIParser():
     def __init__(self, uri):
         self.orig_uri = uri
         uri_parsed = urlparse(uri)
+        self._validate(uri_parsed)
         self._processURI(uri_parsed)
+
+    def _validate(self, uri_parsed):
+        if uri_parsed.scheme not in ["sqrl", "qrl"]:
+            self._cancel("Bad Scheme")
+
+        if uri_parsed.netloc is "":
+            self._cancel("No Domain")
+
+        if uri_parsed.path is "":
+            self._cancel("Invalid Path")
+
+        if uri_parsed.query is "":
+            self._cancel("No Query String")
+
+    def _cancel(self, msg):
+        pass
 
     def _processURI(self, uri):
         self.domain = uri.netloc
@@ -133,7 +150,7 @@ class SQRLRequestor():
                         "Accept": "text/plain"}
         self.uri = uri
         self.key = public_key
-        self.http = httplib.HTTPConnection(self.uri.domain)
+        self.http = httplib.HTTPConnection(self.uri.domain, timeout=9)
 
     def _path(self):
         res = [self.uri.path, "?", self.uri.query,
