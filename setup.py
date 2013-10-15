@@ -15,7 +15,7 @@ setup(
     install_requires=dependencies,
     packages=['sqrl'],
     entry_points={
-        'console_script': [
+        'console_scripts': [
             'sqrl=sqrl.sqrl:main'
         ],
     },
