@@ -190,27 +190,34 @@ def test(uri, signed_uri, public_key, domain):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("sqrlurl", help="The SQRL URL for for Authenticating")
-
     args = parser.parse_args()
     uri = args.sqrlurl
 
+    run(uri)
+
+
+def run(uri):
+    # Parse url
     uriparsed = URIParser(uri)
     domain = uriparsed.getDomain()
 
+    # Get MasterKey
     manager = MKM()
     masterkey = manager.get_key()
 
+    # Generate Site Specific Key pair
     enc = Encryptor(masterkey, domain)
     public_key = enc.getPublicKey()
 
+    # Create Request Object
     sqrlconn = SQRLRequestor(uriparsed, public_key)
     url = sqrlconn.url()
 
+    # Sign the url and send it
     signed_url = enc.sign(url)
-
     sqrlconn.send(signed_url)
 
-    test(url, signed_url, public_key, domain)
+    #test(url, signed_url, public_key, domain)
 
 if __name__ == "__main__":
     main()
