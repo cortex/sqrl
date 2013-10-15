@@ -91,6 +91,12 @@ class Encryptor:
         return sk, vk
 
     def _site_seed(self):
+        """
+        Generates a seed to based on the masterkey
+        and the current site you authenicating with
+        The seed is used to generate the key pair
+        used for signing the request body
+        """
         key = self.masterkey.to_ascii(encoding="base64")
         local_hmac = hmac.new(key)
         local_hmac.update(self.domain)
