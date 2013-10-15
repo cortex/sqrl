@@ -10,6 +10,7 @@ import httplib
 import hmac
 import ed25519
 import base64
+import pynotify
 import os
 from docopt import docopt
 from urlparse import urlparse
@@ -148,6 +149,11 @@ class SQRLRequestor():
         body = self._body(body)
         path = self._path()
         self.http.request("POST", path, body, self.headers)
+        response = self.http.getresponse()
+        if response.status == '200':
+            return True
+        else:
+            return False
 
 
 class BaseConverter:
@@ -219,9 +225,21 @@ def run(uri):
 
     # Sign the url and send it
     signed_url = enc.sign(url)
-    sqrlconn.send(signed_url)
-
     #test(url, signed_url, public_key, domain)
+    result = sqrlconn.send(signed_url)
+
+    # notify of server response
+    if result:
+        notify("Authentication to " + domain + ": Successful")
+    else:
+        notify("Authentication to " + domain + ": Successful")
+
+
+def notify(msg):
+    pynotify.init("SQRL")
+    n = pynotify.Notification("pySQRL", msg)
+    n.show()
+
 
 if __name__ == "__main__":
     main()
