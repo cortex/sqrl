@@ -1,11 +1,19 @@
 #!/usr/bin/env python
+
+# TODO Add notification feature to documentation
+# TODO Catch connection errors
+# TODO Catch sqrlurl format errors
+# TODO Separate components to their own modules
+# TODO Add logging option
+# TODO Standardize masterkey storage location
+
 """
 Usage: sqrl [-n] <SQRLURL>
 
 -n      Notify via libnotify (Gnome)
 
 Example:
-    sqrl.py "sqrl://example.com/login/sqrl?d=6&nut=a95fa8e88dc499758aa404fbf6a55cc8"
+    sqrl.py "sqrl://example.com/login/sqrl?d=6&nut=a95fa8e88dc499758"
 """
 
 import httplib
