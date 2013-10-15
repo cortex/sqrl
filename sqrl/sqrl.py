@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """
-Usage: sqrl <SQRLURL>
+Usage: sqrl [-n] <SQRLURL>
+
+-n      Notify via libnotify (Gnome)
 
 Example:
     sqrl.py "sqrl://example.com/login/sqrl?d=6&nut=a95fa8e88dc499758aa404fbf6a55cc8"
@@ -16,7 +18,7 @@ from docopt import docopt
 from urlparse import urlparse
 from urlparse import parse_qs
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 SQRLVER = "1"
 
 
@@ -203,10 +205,11 @@ def test(uri, signed_uri, public_key, domain):
 def main():
     arguments = docopt(__doc__, version=VERSION)
     url = arguments.get('<SQRLURL>')
-    run(url)
+    bool_notify = arguments.get('-n')
+    run(url, bool_notify)
 
 
-def run(uri):
+def run(uri, bool_notify=False):
     # Parse url
     uriparsed = URIParser(uri)
     domain = uriparsed.getDomain()
@@ -229,10 +232,11 @@ def run(uri):
     result = sqrlconn.send(signed_url)
 
     # notify of server response
-    if result:
-        notify("Authentication to " + domain + ": Successful")
-    else:
-        notify("Authentication to " + domain + ": Successful")
+    if bool_notify:
+        if result:
+            notify("Authentication to " + domain + ": Successful")
+        else:
+            notify("Authentication to " + domain + ": Successful")
 
 
 def notify(msg):
