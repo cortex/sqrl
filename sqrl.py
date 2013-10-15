@@ -176,7 +176,7 @@ def test(uri, signed_uri, public_key, domain):
         print "signature is bad!"
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("sqrlurl", help="The SQRL URL for for Authenticating")
 
@@ -199,4 +199,7 @@ if __name__ == "__main__":
 
     sqrlconn.send(signed_url)
 
-    test(url, signed_url, public_key)
+    test(url, signed_url, public_key, domain)
+
+if __name__ == "__main__":
+    main()
