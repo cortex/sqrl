@@ -21,9 +21,10 @@ Details can be found here: https://www.grc.com/sqrl/sqrl.htm
 
 Usage
 -----
-     usage: sqrl.py [-h] sqrlurl
+     usage: 
+          sqrl.py [-h] sqrlurl
      
      Example:
-     ./sqrl.py "sqrl://example.com/login/sqrl?d=6&nut=a95fa8e88dc499758aa404fbf6a55cc8"
+          sqrl.py "sqrl://example.com/login/sqrl?d=6&nut=a95fa8e88dc499758aa404fbf6a55cc8"
 
 You feed the sqrl URL provided by the authentication service to the script and it uses it to submit and authentication request on your behalf. Based on how the sight is design, you may automatically be logged in. **It's that simple**.
