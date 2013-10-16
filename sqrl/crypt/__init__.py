@@ -31,7 +31,7 @@ class Crypt:
         The seed is used to generate the key pair
         used for signing the request body
         """
-        key = self.masterkey.to_ascii(encoding="base64")
+        key = self.masterkey
         local_hmac = hmac.new(key)
         local_hmac.update(self.domain)
         return local_hmac.hexdigest()

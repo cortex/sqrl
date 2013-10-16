@@ -28,4 +28,5 @@ class MKM:
 
     def get_key(self):
         seed = open(self.storageFile, "rb").read()
-        return ed25519.SigningKey(seed)
+        key = ed25519.SigningKey(seed)
+        return key.to_ascii(encoding="base64")
