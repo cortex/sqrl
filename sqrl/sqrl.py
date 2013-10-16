@@ -1,26 +1,28 @@
 #!/usr/bin/env python
 
-# TODO Add notification feature to documentation
 # TODO Catch connection errors
 # TODO Catch sqrlurl format errors
-# TODO Separate components to their own modules
 # TODO Add logging option
 # TODO Standardize masterkey storage location
 
 """
-Usage: sqrl [-n] <SQRLURL>
+Usage: sqrl [-n] [--path=<Dir>] <SQRLURL>
 
--n      Notify via libnotify (Gnome)
+Options:
+  -n               Notify via libnotify (Gnome)
+  -p --path=<Dir>  Path for config and key storage
 
 Example:
     sqrl "sqrl://example.com/login/sqrl?d=6&nut=a95fa8e88dc499758"
 """
 
+import os
 from client import Client
 from .mkm import MKM
 from docopt import docopt
 
 VERSION = "0.0.2"
+HOME = os.environ['HOME']
 
 
 def main():
