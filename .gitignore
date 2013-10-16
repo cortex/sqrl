@@ -1,3 +1,4 @@
 *.swp
 *.pyc
+.secret_key
 sqrl.egg-info/
