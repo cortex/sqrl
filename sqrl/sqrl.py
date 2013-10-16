@@ -13,7 +13,7 @@ Usage: sqrl [-n] <SQRLURL>
 -n      Notify via libnotify (Gnome)
 
 Example:
-    sqrl.py "sqrl://example.com/login/sqrl?d=6&nut=a95fa8e88dc499758"
+    sqrl "sqrl://example.com/login/sqrl?d=6&nut=a95fa8e88dc499758"
 """
 
 import pynotify
