@@ -36,7 +36,7 @@ def run(url, bool_notify=False):
     masterkey = manager.get_key()
 
     # Create sqrl client and submit request
-    sqrlclient = Client(masterkey, url)
+    sqrlclient = Client(masterkey, url, bool_notify)
     sqrlclient.submit()
 
 if __name__ == "__main__":
