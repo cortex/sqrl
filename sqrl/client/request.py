@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import httplib
+from sqrl.test import test
 
 __sqrlver__ = "1"
 
@@ -14,8 +15,12 @@ class SQRLRequest():
 
     def __init__(self, url, public_key):
         self.headers = SQRLHeader()
+
         self.params = SQRLParams()
         self.params.set_key(public_key)
+        self.key = public_key
+        self.params.set_ver(__sqrlver__)
+
         self.url = url
         self.http = httplib.HTTPConnection(self.url.domain, timeout=9)
 
@@ -30,11 +35,17 @@ class SQRLRequest():
     def _body(self, body):
         return "sqrlsig=" + body
 
-    def send(self, body):
-        body = self._body(body)
+    def send(self, body, debug):
+        sigbody = self._body(body)
         path = self._path()
-        self.http.request("POST", path, body, self.headers.get())
+        self.http.request("POST", path, sigbody, self.headers.get())
         response = self.http.getresponse()
+
+        # Display debug info if set
+        if debug:
+            test(self.get_url(), body,
+                 self.key, self.url.domain, __sqrlver__)
+
         if response.status == 200:
             return True
         else:
@@ -52,6 +63,7 @@ class SQRLHeader:
     def get(self):
         return self.headers
 
+
 class SQRLParams:
     """
     SQRLParam
@@ -60,7 +72,7 @@ class SQRLParams:
     """
     def __init__(self):
         self.buffer = []
-        self.set_ver(__sqrlver__)
+        self.set = ""
         self.key = ""
         self.opt = []
 

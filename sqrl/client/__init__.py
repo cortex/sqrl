@@ -26,11 +26,7 @@ class Client:
             n.show()
 
     def submit(self):
-        result = self.sqrlreq.send(self.signed_url)
-
-        if self.debug:
-            test(self.sqrlreq.get_url(), self.signed_url,
-                 self.public_key, self.domain)
+        result = self.sqrlreq.send(self.signed_url, self.debug)
 
         # notify of server response
         if result:
