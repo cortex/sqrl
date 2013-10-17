@@ -10,37 +10,37 @@ class URLParser():
     - Value object for initial SQRL URL
     """
 
-    def __init__(self, uri):
-        self.orig_uri = uri
-        uri_parsed = urlparse(uri)
-        self._validate(uri_parsed)
-        self._processURI(uri_parsed)
+    def __init__(self, url):
+        self.orig_url = url
+        url_parsed = urlparse(url)
+        self._validate(url_parsed)
+        self._processurl(url_parsed)
 
-    def _validate(self, uri_parsed):
-        if uri_parsed.scheme not in ["sqrl", "qrl"]:
+    def _validate(self, url_parsed):
+        if url_parsed.scheme not in ["sqrl", "qrl"]:
             self._cancel("Bad Scheme")
 
-        if uri_parsed.netloc is "":
+        if url_parsed.netloc is "":
             self._cancel("No Domain")
 
-        if uri_parsed.path is "":
+        if url_parsed.path is "":
             self._cancel("Invalid Path")
 
-        if uri_parsed.query is "":
+        if url_parsed.query is "":
             self._cancel("No Query String")
 
     def _cancel(self, msg):
         pass
 
-    def _processURI(self, uri):
-        self.domain = uri.netloc
-        self.path = uri.path
-        self.scheme = uri.scheme
-        self.query = uri.query
-        self.queries = parse_qs(uri.query)
+    def _processurl(self, url):
+        self.domain = url.netloc
+        self.path = url.path
+        self.scheme = url.scheme
+        self.query = url.query
+        self.queries = parse_qs(url.query)
 
-    def getURI(self):
-        return self.orig_uri
+    def getURL(self):
+        return self.orig_url
 
     def getDomain(self):
         domain = ''

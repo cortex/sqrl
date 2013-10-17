@@ -12,20 +12,20 @@ class SQRLRequest():
     - Submits the SQRL reuqest
     """
 
-    def __init__(self, uri, public_key):
+    def __init__(self, url, public_key):
         self.headers = SQRLHeader()
         self.params = SQRLParams()
         self.params.set_key(public_key)
-        self.uri = uri
-        self.http = httplib.HTTPConnection(self.uri.domain, timeout=9)
+        self.url = url
+        self.http = httplib.HTTPConnection(self.url.domain, timeout=9)
 
     def _path(self):
-        res = [self.uri.path, "?", self.uri.query,
+        res = [self.url.path, "?", self.url.query,
                "&", self.params.get()]
         return "".join(res)
 
-    def url(self):
-        return self.uri.domain + self._path()
+    def get_url(self):
+        return self.url.domain + self._path()
 
     def _body(self, body):
         return "sqrlsig=" + body
