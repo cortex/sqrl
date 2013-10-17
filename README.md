@@ -43,9 +43,22 @@ You feed the sqrl URL provided by the authentication service to the script and
 it uses it to submit and authentication request on your behalf. Based on how
 the sight is design, you may automatically be logged in. **It's that simple**.
 
-Feature
--------
+Features
+--------
 
 * Debug - Displays the content of the payload for your to veriy
 * Notification - Displays notifications on successful or fail auth attemps
   (Gnome Only)
+
+Debug
+-----
+
+When the [-d] argument is given the script outputs all the components of the
+request.
+
+    **url**: localhost:8080/sqrl?nut=1bfe7ef6f9989bd5709d61f7ac28195e&sqrlver=1&sqrlkey=Zl_nrges0MGPRelRoH9SEwwPcARQSA0QmYNx-ZDcOKU
+    **Domin**: "localhost:8080"
+    **Publick Key**: Zl_nrges0MGPRelRoH9SEwwPcARQSA0QmYNx-ZDcOKU
+    **Signed url**: LtYQU_j5Lwp6c0TrWEGhP0tj5o_PM8yni_tLmrG375aEIkUNdJzWl_XmLUN-dtZHuKWP1pf8iNUVSSyYRq3QDA
+    **signature is good**
+
