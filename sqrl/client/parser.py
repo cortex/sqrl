@@ -33,7 +33,8 @@ class URLParser():
         pass
 
     def _processurl(self, url):
-        self.domain = url.netloc
+        self.domain = self._cleanDomain(url.netloc)
+        self.netloc = url.netloc
         self.path = url.path
         self.scheme = url.scheme
         self.query = url.query
@@ -41,6 +42,9 @@ class URLParser():
 
     def getURL(self):
         return self.orig_url
+
+    def _cleanDomain(self, domain):
+        return domain.split(":")[0]
 
     def getDomain(self):
         domain = ''

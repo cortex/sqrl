@@ -8,7 +8,7 @@ __sqrlver__ = "1"
 
 class SQRLRequest():
     """
-    SQRLRequestor
+    SQRLRequest
     - Formats SQRL request
     - Submits the SQRL reuqest
     """
@@ -18,11 +18,11 @@ class SQRLRequest():
 
         self.params = SQRLParams()
         self.params.set_key(public_key)
-        self.key = public_key
         self.params.set_ver(__sqrlver__)
+        self.key = public_key
 
         self.url = url
-        self.http = httplib.HTTPConnection(self.url.domain, timeout=9)
+        self.http = httplib.HTTPConnection(self.url.netloc, timeout=9)
 
     def _path(self):
         res = [self.url.path, "?", self.url.query,
@@ -30,7 +30,7 @@ class SQRLRequest():
         return "".join(res)
 
     def get_url(self):
-        return self.url.domain + self._path()
+        return self.url.netloc + self._path()
 
     def _body(self, body):
         return "sqrlsig=" + body
