@@ -46,8 +46,8 @@ the sight is design, you may automatically be logged in. **It's that simple**.
 Features
 --------
 
-* Debug - Displays the content of the payload for your to veriy
-* Notification - Displays notifications on successful or fail auth attemps
+* **Debug** - Displays the content of the payload for your to veriy
+* **Notification** - Displays notifications on successful or fail auth attemps
   (Gnome Only)
 
 Debug
