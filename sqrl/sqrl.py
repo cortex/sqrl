@@ -3,7 +3,6 @@
 # TODO Catch connection errors
 # TODO Catch sqrlurl format errors
 # TODO Add logging option
-# TODO Standardize masterkey storage location
 
 """
 Usage: sqrl [-d] [-n] [--path=<Dir>] <SQRLURL>
