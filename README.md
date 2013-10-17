@@ -56,9 +56,10 @@ Debug
 When the [-d] argument is given the script outputs all the components of the
 request.
 
-    **url**: localhost:8080/sqrl?nut=1bfe7ef6f9989bd5709d61f7ac28195e&sqrlver=1&sqrlkey=Zl_nrges0MGPRelRoH9SEwwPcARQSA0QmYNx-ZDcOKU
-    **Domin**: "localhost:8080"
-    **Publick Key**: Zl_nrges0MGPRelRoH9SEwwPcARQSA0QmYNx-ZDcOKU
-    **Signed url**: LtYQU_j5Lwp6c0TrWEGhP0tj5o_PM8yni_tLmrG375aEIkUNdJzWl_XmLUN-dtZHuKWP1pf8iNUVSSyYRq3QDA
-    **signature is good**
+    Url: localhost:8080/sqrl?nut=1bfe7ef6f9989bd5709d61f7ac28195e&sqrlver=1&sqrlkey=Zl_nrges0MGPRelRoH9SEwwPcARQSA0QmYNx-ZDcOKU
+    Domin: "localhost:8080"
+    SQRLver: 1
+    SQRLkey: Zl_nrges0MGPRelRoH9SEwwPcARQSA0QmYNx-ZDcOKU
+    SQRLsig: LtYQU_j5Lwp6c0TrWEGhP0tj5o_PM8yni_tLmrG375aEIkUNdJzWl_XmLUN-dtZHuKWP1pf8iNUVSSyYRq3QDA
+    signature is good
 
