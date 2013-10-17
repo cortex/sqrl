@@ -23,18 +23,23 @@ from docopt import docopt
 
 VERSION = "0.0.2"
 HOME = os.environ['HOME']
-
+CONFIG_DIR = '.config/sqrl/'
+WORKING_DIR = HOME + '/' + CONFIG_DIR
 
 def main():
     arguments = docopt(__doc__, version=VERSION)
     url = arguments.get('<SQRLURL>')
     bool_notify = arguments.get('-n')
-    run(url, bool_notify)
+    path = arguments.get('--path')
+    if not path:
+        path = WORKING_DIR
+
+    run(url, path, bool_notify)
 
 
-def run(url, bool_notify=False):
+def run(url, path, bool_notify=False):
     # Get MasterKey
-    manager = MKM()
+    manager = MKM(path)
     masterkey = manager.get_key()
 
     # Create sqrl client and submit request

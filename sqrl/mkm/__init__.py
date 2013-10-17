@@ -12,10 +12,14 @@ class MKM:
     - Retrieves Stored Keys
     """
 
-    def __init__(self, path="./", force=False):
+    def __init__(self, path):
+        self.path = path
         self.storageFile = path + ".secret_key"
-        self.force = force
         self._create_key()
+
+    def _init_dir(self):
+        if not os.path.exists(self.path):
+            os.mkdir(self.path)
 
     def _create_key(self):
         sk, vk = ed25519.create_keypair()
@@ -23,7 +27,8 @@ class MKM:
 
     def _store_key(self, sk):
         # if the storageFile doesnt exists or force is set write file
-        if not os.path.exists(self.storageFile) or self.force:
+        if not os.path.exists(self.storageFile):
+            self._init_dir()
             open(self.storageFile, "wb").write(sk.to_seed())
 
     def get_key(self):
