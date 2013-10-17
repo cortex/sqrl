@@ -30,6 +30,8 @@ WORKING_DIR = HOME + '/' + CONFIG_DIR
 
 def main():
     arguments = docopt(__doc__, version=VERSION)
+
+    # Collecting arguments
     url = arguments.get('<SQRLURL>')
     bool_notify = arguments.get('-n')
     path = arguments.get('--path')
