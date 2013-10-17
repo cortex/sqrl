@@ -6,9 +6,10 @@
 # TODO Standardize masterkey storage location
 
 """
-Usage: sqrl [-n] [--path=<Dir>] <SQRLURL>
+Usage: sqrl [-d] [-n] [--path=<Dir>] <SQRLURL>
 
 Options:
+  -d               Debugging output
   -n               Notify via libnotify (Gnome)
   -p --path=<Dir>  Path for config and key storage
 
@@ -17,8 +18,8 @@ Example:
 """
 
 import os
-from client import Client
 from .mkm import MKM
+from client import Client
 from docopt import docopt
 
 VERSION = "0.0.2"
@@ -26,24 +27,30 @@ HOME = os.environ['HOME']
 CONFIG_DIR = '.config/sqrl/'
 WORKING_DIR = HOME + '/' + CONFIG_DIR
 
+
 def main():
     arguments = docopt(__doc__, version=VERSION)
     url = arguments.get('<SQRLURL>')
     bool_notify = arguments.get('-n')
     path = arguments.get('--path')
+    debug = arguments.get('-d')
+
     if not path:
         path = WORKING_DIR
 
-    run(url, path, bool_notify)
+    if not debug:
+        debug = False
+
+    run(url, path, debug, bool_notify)
 
 
-def run(url, path, bool_notify=False):
+def run(url, path, debug, bool_notify=False):
     # Get MasterKey
     manager = MKM(path)
     masterkey = manager.get_key()
 
     # Create sqrl client and submit request
-    sqrlclient = Client(masterkey, url, bool_notify)
+    sqrlclient = Client(masterkey, url, bool_notify, debug)
     sqrlclient.submit()
 
 if __name__ == "__main__":
