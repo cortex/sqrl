@@ -7,7 +7,7 @@ pySQRL
 What is SQRL?
 
 A newly proposed authentication scheme from Steve Gibson of GRC.com. It allows
-for user authentication without the need for:
+for user authentication without the need of:
 
 * Username / Password pair
 * OTP (One Time Password)
