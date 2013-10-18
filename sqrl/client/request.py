@@ -38,8 +38,13 @@ class SQRLRequest():
     def send(self, body, debug):
         sigbody = self._body(body)
         path = self._path()
-        self.http.request("POST", path, sigbody, self.headers.get())
-        response = self.http.getresponse()
+        try:
+            self.http.request("POST", path, sigbody, self.headers.get())
+            response = self.http.getresponse()
+        except Exception as e:
+            code, msg = e
+            print (msg)
+            return False, msg
 
         # Display debug info if set
         if debug:
@@ -47,9 +52,9 @@ class SQRLRequest():
                  self.key, self.url.domain, __sqrlver__)
 
         if response.status == 200:
-            return True
+            return True, "Authentication Successful!"
         else:
-            return False
+            return False, "Authentication Failed!"
 
 
 class SQRLHeader:

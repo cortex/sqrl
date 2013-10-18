@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import pynotify
-from sqrl.test import test
 from crypt import Crypt
 from parser import URLParser
 from request import SQRLRequest
@@ -26,10 +25,7 @@ class Client:
             n.show()
 
     def submit(self):
-        result = self.sqrlreq.send(self.signed_url, self.debug)
-
+        result, msg = self.sqrlreq.send(self.signed_url, self.debug)
+        msg = msg + " (" + self.domain + ")"
         # notify of server response
-        if result:
-            self._notify("Authentication to " + self.domain + ": Successful")
-        else:
-            self._notify("Authentication to " + self.domain + ": Failed")
+        self._notify(msg)
