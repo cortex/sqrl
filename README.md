@@ -25,7 +25,15 @@ are by using a private / public key signatures. This ends up being vastly more
 secure.
 
 Details can be found here: https://www.grc.com/sqrl/sqrl.htm
+The SQRL protocol is new and is subject to change. I'll try my best to follow the published implementation found here:
+https://www.grc.com/sqrl/details.htm
+Install
+-------
+The this package requires **ed25519**, **docopt** and **pyinotify**
 
+     git clone http://github.com/bushxnyc/sqrl.git
+     cd sqrl
+     sudo python setup.py install
 
 Usage
 -----
