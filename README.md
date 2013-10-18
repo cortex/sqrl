@@ -16,13 +16,12 @@ for user authentication without the need of:
 * An in-band authentication exchange
 
 In a normal web authentication system your credentials are stored with the site
-you are trying to access. If the site were to be compromised the yours and
-every other users account information may be accessible allowing the intruder
+you are trying to access. If the site were to be compromised yours and
+every other user's account information may be accessible; allowing the intruder
 to attempt to use you credentials with elsewhere. The best part about SQRL is
-that the site never has your login credentials. You keep your never send your
-**_"password"_**. The site authenticates you using by verifying you are who you
-are by using a private / public key signatures. This ends up being vastly more
-secure.
+that the site never has your login credentials. With SQRL you **_never_** send your
+**_"password"_**. The site authenticates you using by verifying your identity by 
+using a private / public key signatures. This ends up being vastly more secure.
 
 Details can be found here: https://www.grc.com/sqrl/sqrl.htm
 The SQRL protocol is new and is subject to change. I'll try my best to follow the published implementation found here:
