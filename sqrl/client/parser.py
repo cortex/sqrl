@@ -43,6 +43,12 @@ class URLParser():
     def getURL(self):
         return self.orig_url
 
+    def isSecure(self):
+        if self.scheme == "sqrl":
+            return True
+        if self.scheme == "qrl":
+            return False
+
     def _cleanDomain(self, domain):
         return domain.split(":")[0]
 

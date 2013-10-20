@@ -22,7 +22,10 @@ class SQRLRequest():
         self.key = public_key
 
         self.url = url
-        self.http = httplib.HTTPConnection(self.url.netloc, timeout=9)
+        if self.url.isSecure():
+            self.http = httplib.HTTPSConnection(self.url.netloc, timeout=9)
+        else:
+            self.http = httplib.HTTPConnection(self.url.netloc, timeout=9)
 
     def _path(self):
         res = [self.url.path, "?", self.url.query,
@@ -30,7 +33,7 @@ class SQRLRequest():
         return "".join(res)
 
     def get_url(self):
-        return self.url.netloc + self._path()
+        return self.url.scheme + "://" + self.url.netloc + self._path()
 
     def _body(self, body):
         return "sqrlsig=" + body
@@ -54,7 +57,7 @@ class SQRLRequest():
         if response.status == 200:
             return True, "Authentication Successful!"
         else:
-            return False, "Authentication Failed!"
+            return False, "Authentication Failed! " + response.reason
 
 
 class SQRLHeader:
