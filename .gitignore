@@ -1,3 +1,5 @@
+dist/
+build/
 *.swp
 *.pyc
 sqrl.egg-info/
