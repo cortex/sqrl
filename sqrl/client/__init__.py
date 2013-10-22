@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pynotify
+import notify
 from crypt import Crypt
 from parser import URLParser
 from request import SQRLRequest
@@ -20,8 +20,8 @@ class Client:
 
     def _notify(self, msg):
         if self.notice:
-            pynotify.init("SQRL")
-            n = pynotify.Notification("pySQRL", msg)
+            notify.init("SQRL")
+            n = notify.Notification("pySQRL", msg)
             n.show()
 
     def submit(self):
