@@ -13,7 +13,7 @@ def test(url, signed_url, public_key, domain, version):
     verifying_key = ed25519.VerifyingKey(key)
 
     print "Challenge: " + url
-    print "Domin: \"" + domain + "\""
+    print "Domain: \"" + domain + "\""
     print "SQRLver: " + version
     print "SQRLKey: " + public_key
     print "SQRLsig: " + signed_url
